@@ -10,6 +10,7 @@
 - allows you to add your own extraction methods (pass them as argument)
 - data values are normalized and cleaned from obsolete Wikitext markup
 - yields per section, not per page (a word can have multiple meanings, which is why some Wiktionary pages have multiple 'sections')
+- exports CSV file with found entries
 
 ## Usage
 1. Install via `pip3 install wiktionary_de_parser`.
