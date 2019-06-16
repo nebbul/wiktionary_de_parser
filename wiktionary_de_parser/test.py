@@ -10,7 +10,7 @@ from datetime import datetime
 # add parent dir to PATH
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-bzfile_path = 'E:/Work/UnityProjects/DeutschCompanion/data/dewiktionary-20190601-pages-meta-current.xml.bz2'
+bzfile_path = 'C:/Users/Gregor/Downloads/dewiktionary-latest-pages-articles-multistream.xml.bz2'
 bz = BZ2File(bzfile_path)
 collection = set()
 my_list = []
