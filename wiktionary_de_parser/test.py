@@ -10,11 +10,11 @@ from datetime import datetime
 # add parent dir to PATH
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-bzfile_path = 'C:/Users/Gregor/Downloads/dewiktionary-latest-pages-articles-multistream.xml.bz2'
+bzfile_path = 'E:/Work/UnityProjects/DeutschCompanion/data/dewiktionary-20190601-pages-meta-current.xml.bz2'
 bz = BZ2File(bzfile_path)
 collection = set()
 my_list = []
-found_lemmas = []
+#found_lemmas = []
 startTime = datetime.now()
 
 countFound = 0
@@ -30,12 +30,6 @@ wanted_flexions = [
     'Genitiv Singular',
     'Genitiv Plural',
 ]
-
-
-def nullcheck(s):
-    s = s if s is not None else ''
-    return s
-
 
 print('---- SCRIPT START -----')
 print('---- PARSING START -----')
@@ -53,43 +47,59 @@ for record in Parser(bz):
 
         lemma = record['lemma']
 
-        # skip duplicates
-        if lemma in found_lemmas: continue
+        # do not skip duplicates
+        #if lemma in found_lemmas: continue
         # skip abbreviations
         if lemma.isupper(): continue
-
-        # print(lemma)
+        # skip some weird words
+        if lemma.startswith('-'): continue
 
         genus = record['flexion'].get('Genus')
         if genus == 'm': genus = 0
         elif genus == 'f': genus = 1
         elif genus == 'n': genus = 2
-        else: continue # skip if there is no article
+        else: continue  # skip if there is no article
         # print(genus)
 
         flex_list = []
         for flexion in wanted_flexions:
-            flex = nullcheck(record['flexion'].get(flexion))
-            flex_list.append(flex)
+            flex = record['flexion'].get(flexion)
+            flex_verify = flex if flex is not None else ''
+            flex_list.append(flex_verify)
             # print(flexion + ': ' + flex)
 
         # if missing BOTH nominative sing. and plural we skip the word completely
         if flex_list[0] is '' and flex_list[1] is '': continue
 
+        #print(lemma)
+
+        # get meaning "Bedeutungen"
+        meanings = record['meaning']
+        #print(meanings)
+
+        # get translations
+        translations = record['translation']
+        t = []
+        for key in translations.keys():
+            t.append(record['translation'].get(key))
+
+        #print('---------')
         # column values
         tmp_list = [lemma, genus, flex_list[0], flex_list[1], flex_list[2], flex_list[3], flex_list[4],
-                    flex_list[5], flex_list[6], flex_list[7]]
+                    flex_list[5], flex_list[6], flex_list[7], meanings,
+                    t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8], t[9],
+                    t[10], t[11], t[12], t[13], t[14], t[15], t[16], t[17], t[18], t[19],
+                    t[20], t[21]]
         # print(tmp_list)
         my_list.append(tmp_list)
 
         # store the lemmas so we can check against duplicates and skip them
-        found_lemmas.append(lemma)
+        #found_lemmas.append(lemma)
 
         countFound += 1
         # print("-----")
 
-        # count += 1
-        # if count > 49:
+        #if countFound > 5000:
         #    break
 
 endTime = datetime.now()
