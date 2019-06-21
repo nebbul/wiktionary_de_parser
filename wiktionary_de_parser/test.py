@@ -47,12 +47,13 @@ for record in Parser(bz):
 
         lemma = record['lemma']
 
-        # do not skip duplicates
-        #if lemma in found_lemmas: continue
         # skip abbreviations
         if lemma.isupper(): continue
         # skip some weird words
         if lemma.startswith('-'): continue
+        # skip some more weird words
+        if lemma.startswith('Benutzer Diskussion:'): continue
+        if lemma.startswith('Benutzer:'): continue
 
         genus = record['flexion'].get('Genus')
         if genus == 'm': genus = 0
@@ -93,13 +94,10 @@ for record in Parser(bz):
         # print(tmp_list)
         my_list.append(tmp_list)
 
-        # store the lemmas so we can check against duplicates and skip them
-        #found_lemmas.append(lemma)
-
         countFound += 1
         # print("-----")
 
-        #if countFound > 5000:
+        #if countFound > 500:
         #    break
 
 endTime = datetime.now()

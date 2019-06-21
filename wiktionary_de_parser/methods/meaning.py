@@ -6,11 +6,42 @@ def remove_tags(text):
     text = re.sub(r'(<!--.+(?=-->)-->)', ' ', text)
     # remove <ref></ref> tags
     text = re.sub(r'(<ref>.+(?=</ref>)</ref>)', ' ', text)
-    # replace superimposition tag with a ^
+    text = re.sub(r'(<ref name = ".*">.+(?=</ref>)</ref>)', ' ', text)
+    text = re.sub(r'(<ref name= ".*">.+(?=</ref>)</ref>)', ' ', text)
+    # remove tags
+    text = re.sub(r'(<span style=".*">)', '', text)
+    text = re.sub(r'(</span>)', '', text)
+    text = re.sub(r'(<ref name=".*">.+(?=</ref>)</ref>)', ' ', text)
+    text = re.sub(r'(<ref name=".*"/>)', ' ', text)
+    text = re.sub(r'(<ref name=".*"/>)', ' ', text)
+    text = re.sub(r'(<ref name=".*" />)', ' ', text)
+    text = re.sub(r'(<ref name=.*>)', ' ', text)
+    text = re.sub(r'(<ref name = .*>)', ' ', text)
+    text = re.sub(r'(<ref name = ".*">)', ' ', text)
+    text = re.sub(r'(<ref name = ".*"/>)', ' ', text)
+    text = re.sub(r'(<ref name = ".*" />)', ' ', text)
+    text = re.sub(r'(<ref name= ".*" />)', ' ', text)
+    text = re.sub(r'(<ref name =".*" />)', ' ', text)
+    text = re.sub(r'(<REF>.+(?=</REF>)</REF>)', ' ', text)
     text = text.replace('<sup>', '^')
     text = text.replace('</sup>', '')
     text = text.replace('<sub>', '')
     text = text.replace('</sub>', '')
+    text = text.replace('<small>', '')
+    text = text.replace('</small>', '')
+    text = text.replace('<big>', '')
+    text = text.replace('</big>', '')
+    text = text.replace('<code>', ' ')
+    text = text.replace('</code>', ' ')
+    text = text.replace('<math>', ' ')
+    text = text.replace('</math>', ' ')
+    text = text.replace('<nowiki>', ' ')
+    text = text.replace('<nowiki/>', ' ')
+    text = text.replace('<nowiki />', ' ')
+    text = text.replace('</nowiki>', ' ')
+    text = text.replace('<ref>', ' ')
+    text = text.replace('<br />', ' ')
+    text = text.replace('<!--', '')
 
     # trim
     text = text.strip()
@@ -27,7 +58,6 @@ def clean_text(text):
     text = text.replace('{', '')
     text = text.replace('}', '')
     text = text.replace('K|', '')
-    text = text.replace('K|', '')
     text = text.replace('„', '\"')
     text = text.replace('“', '\"')
     text = text.replace('|t2=_|', '')
@@ -39,6 +69,13 @@ def clean_text(text):
     text = text.replace(' m/', ' ')
     text = text.replace('^1 ', ' ')
     text = text.replace(' ^2 ', ' ')
+    text = text.replace('(– – υ υ)', '')
+    text = text.replace('(– υ – υ – – –)', '')
+    text = text.replace('& nbsp;', '')
+    text = re.sub(r'(/t.*=_/)', '/', text)
+    text = re.sub(r'(/t.*=;/)', '/', text)
+    text = re.sub(r'(/A=.*)', '', text)
+    text = text.replace('/ft=', ',')
 
     # trim
     text = text.strip()
@@ -47,10 +84,12 @@ def clean_text(text):
 
 
 def polish_text(text):
-    if text.endswith(';'):
-        text = text.replace(';', '')
+    if text.endswith(';') or text.endswith(':'):
+        text = text[:-1]
     if not text.endswith('.'):
         text = text + '.'
+    if text.startswith(':'):
+        text = text[1:] # 71602
 
     # uppcase first letter
     text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), text, 1)
@@ -61,10 +100,21 @@ def polish_text(text):
     text = text.replace('Va./', 'Veraltet,')
     text = text.replace('Va. /', 'Veraltet,')
     text = text.replace('Va.', 'Veraltet,')
+    text = text.replace('*Veraltet,:.', 'Veraltet,')
+    text = text.replace('*Veraltet,', 'Veraltet,')
     text = text.replace('kPl./', 'kein Plural,')
     text = text.replace('KPl.', 'kein Plural,')
     text = text.replace('Ugs./', 'Umgangssprachlig,')
     text = text.replace('(ugs.)', '(Umgangssprachlig)')
+    text = text.replace('/; ugs./:.', '(Umgangssprachlig)')
+    text = text.replace('ugs./,', '(Umgangssprachlig)')
+    text = text.replace('*Ugs.', '(Umgangssprachlig)')
+    text = text.replace(' :', ':')
+    text = text.replace(' ,', ',')
+
+    if text.endswith(','):
+        text = text[:-1]
+        text = text + '.'
 
     return text
 
@@ -91,10 +141,6 @@ def init(title, text, current_record):
         meaning = polished_text
     else:
         meaning = ''
-    #if not match_firstline:
-    #    return False
-
-
 
     return {
         'meaning': meaning

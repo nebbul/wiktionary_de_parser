@@ -1,12 +1,12 @@
 import re
 #from translate import Translator
 
-# todo: use translator package to translate words that are not present on wiktionary (limited data)
-# todo: probably weird licenses
-# todo: Google API [??]
-# todo: Microsoft API [pay per char, 2M free per day]
-# todo: MyMemory [anon:1000 words/day, register:10000 words/day)
-# todo: https://github.com/terryyin/translate-python
+# use translator package to translate words that are not present on wiktionary (limited data)
+# probably weird licenses
+# Google API [??]
+# Microsoft API [pay per char, 2M free per day]
+# MyMemory [anon:1000 words/day, register:10000 words/day)
+# https://github.com/terryyin/translate-python
 
 wanted_languages = [
     'ca',  # Catalan / català
