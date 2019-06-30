@@ -50,9 +50,10 @@ def remove_tags(text):
 
 
 def clean_text(text):
-    text = text.replace('{{Bedeutungen}}\n', '')
+    text = text.replace('{{Beispiele}}\n', '')
     text = text.replace(':[1]', '')
     text = text.replace('\'', '')
+    text = text.replace('[1, 2]', '')
     text = text.replace('[', '')
     text = text.replace(']', '')
     text = text.replace('{', '')
@@ -76,6 +77,8 @@ def clean_text(text):
     text = re.sub(r'(/t.*=;/)', '/', text)
     text = re.sub(r'(/A=.*)', '', text)
     text = text.replace('/ft=', ',')
+    text = text.replace('(w:', '(')
+    text = text.replace('…', '...')
 
     # trim
     text = text.strip()
@@ -89,7 +92,7 @@ def polish_text(text):
     if not text.endswith('.') and not text.endswith('?') and not text.endswith('!'):
         text = text + '.'
     if text.startswith(':'):
-        text = text[1:]
+        text = text[1:] # 71602
 
     # uppcase first letter
     text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), text, 1)
@@ -116,6 +119,8 @@ def polish_text(text):
         text = text[:-1]
         text = text + '.'
 
+    text = text.strip()
+
     return text
 
 
@@ -128,7 +133,7 @@ def init(title, text, current_record):
 """
     text = remove_tags(text)
 
-    match_firstline = re.search(r'({{Bedeutungen}}\n[^\n]+)', text)
+    match_firstline = re.search(r'({{Beispiele}}\n[^\n]+)', text)
     if match_firstline:
         first_line = match_firstline.group(1)
         # print(first_line)
@@ -137,11 +142,13 @@ def init(title, text, current_record):
 
         polished_text = polish_text(cleaned_text)
 
-        # print(first_line)
-        meaning = polished_text
+        #if 'Beispiele fehlen' in text:
+        #    example = ''
+        #else:
+        example = polished_text
     else:
-        meaning = ''
+        example = ''
 
     return {
-        'meaning': meaning
+        'example': example
     }
