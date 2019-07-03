@@ -62,6 +62,8 @@ for record in Parser(bz):
         else: continue  # skip if there is no article
         # print(genus)
 
+        ipa = record['ipa']
+
         flex_list = []
         for flexion in wanted_flexions:
             flex = record['flexion'].get(flexion)
@@ -71,8 +73,6 @@ for record in Parser(bz):
 
         # if missing BOTH nominative sing. and plural we skip the word completely
         if flex_list[0] is '' and flex_list[1] is '': continue
-
-        #print(lemma)
 
         # get meaning "Bedeutungen"
         meanings = record['meaning']
@@ -92,7 +92,7 @@ for record in Parser(bz):
 
         #print('---------')
         # column values
-        tmp_list = [lemma, genus, flex_list[0], flex_list[1], flex_list[2], flex_list[3], flex_list[4],
+        tmp_list = [lemma, genus, ipa, flex_list[0], flex_list[1], flex_list[2], flex_list[3], flex_list[4],
                     flex_list[5], flex_list[6], flex_list[7], meanings, examples,
                     t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8], t[9],
                     t[10], t[11], t[12], t[13], t[14], t[15], t[16], t[17], t[18], t[19],
@@ -103,7 +103,7 @@ for record in Parser(bz):
         countFound += 1
         # print("-----")
 
-        #if countFound > 500:
+        #if countFound > 5000:
         #    break
 
 endTime = datetime.now()

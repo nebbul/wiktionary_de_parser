@@ -86,10 +86,12 @@ def clean_text(text):
 def polish_text(text):
     if text.endswith(';') or text.endswith(':'):
         text = text[:-1]
-    if not text.endswith('.') and not text.endswith('?') and not text.endswith('!'):
+    if not text.endswith('.') and not text.endswith('?') and not text.endswith('!') and not text.endswith('"'):
         text = text + '.'
     if text.startswith(':'):
         text = text[1:]
+    if text == '.':
+        text = ''
 
     # uppcase first letter
     text = re.sub('([a-zA-Z])', lambda x: x.groups()[0].upper(), text, 1)
@@ -115,6 +117,14 @@ def polish_text(text):
     if text.endswith(','):
         text = text[:-1]
         text = text + '.'
+
+    text = text.replace('Beispiele fehlen.', '')
+    text = text.replace('Beispiele fehlen/spr=.', '')
+    text = text.replace('Beispiele fehlen/spr=de.', '')
+    text = text.replace('Beispiele fehlen/spr=Deutsch.', '')
+    text = text.replace('Beispiele fehlen/spr=Deutsch.', '')
+    text = text.replace('Beispiele fehlen/spr=en.', '')
+    text = text.replace('Beispiele fehlen/spr=it.', '')
 
     return text
 

@@ -4,12 +4,12 @@ import re
 def init(title, text, current_record):
     match_firstline = re.search(r'({{Aussprache}}\n[^\n]+)', text)
     if not match_firstline:
-        return False
+        return {'ipa': ''}
 
     first_line = match_firstline.group(1)
     found_ipa = re.findall(r'{{Lautschrift\|([^}]+)}}', first_line)
     if not found_ipa:
-        return False
+        return {'ipa': ''}
 
     result = found_ipa[0]
 
